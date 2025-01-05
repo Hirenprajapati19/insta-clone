@@ -30,6 +30,7 @@ const Createpost = () => {
                 .then(data => {
                     if (data.error) {
                         notifyA(data.error)
+                        console.log("hiren")
                     } else {
                         notifyB("Successfully Posted")
                         navigate("/")
