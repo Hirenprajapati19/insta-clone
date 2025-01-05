@@ -103,7 +103,6 @@ router.put("/comment", requireLogin, (req, res) => {
 router.delete("/deletePost/:postId", requireLogin, (req, res) => {
     POST.findOne({ _id: req.params.postId })
         .populate("postedBy", "_id")
-        console.log("land ghaluu thandapan")
         .then((post,err) => {
             if (!post || err) {
                 return res.status(404).json({ err: "Post not found" });
