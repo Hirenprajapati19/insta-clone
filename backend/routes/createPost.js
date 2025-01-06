@@ -33,8 +33,7 @@ router.get("/myposts", requireLogin, (req, res) => {
     // console.log(req.user)
     POST.find({ postedBy: req.user._id })
         .populate("postedBy", "_id name")
-
-        // .populate("comments.postedBy", "_id name")
+        .populate("comments.postedBy", "_id name")
         // .sort("-createdAt")
 
         .then(myposts => {
@@ -103,31 +102,19 @@ router.put("/comment", requireLogin, (req, res) => {
 router.delete("/deletePost/:postId", requireLogin, (req, res) => {
     POST.findOne({ _id: req.params.postId })
         .populate("postedBy", "_id")
-        .then((post,err) => {
-            if (!post || err) {
-                return res.status(404).json({ err: "Post not found" });
+        .then((post) => {
+            if (!post) {
+                return res.status(404).json({ error: "Post not found" });
             }
-            console.log(post.postedBy._id, req.user._id)
-            // if (post.postedBy._id.toString() === req.user._id.toString()) {
-            //     post.remove()
-            //         .then(() => {
-            //             res.json({ message: "Post deleted successfully" });
-            //         })
-            //         .catch(err => {
-            //             res.status(422).json({ error: err.message });
-            //         });
-            // }
-
-
-
-
-            // console.log("Post found:", post);
-
-            // POST.deleteOne({ _id: req.params.postId })
-            //     .then(() => res.json({ message: "Post deleted successfully" }))
-            //     .catch(err => res.status(500).json({ error: "Failed to delete post" }));
+            if (post.postedBy._id.toString() === req.user._id.toString()) {
+                POST.deleteOne({ _id: req.params.postId })
+                    .then(() => res.json({ message: "Post deleted successfully" }))
+                    .catch((err) => res.status(422).json({ error: err.message }));
+            } else {
+                res.status(403).json({ error: "Unauthorized action" });
+            }
         })
-        // .catch(err => res.status(422).json({ error: err.message }));
+        .catch((err) => res.status(422).json({ error: err.message }));
 });
 
 

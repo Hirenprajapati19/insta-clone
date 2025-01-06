@@ -1,9 +1,24 @@
+
 import React, { useEffect } from 'react'
 import "./Profile.css"
 import { useState } from 'react'
+import PostDetail from './PostDetail'
 
 const Profile = () => {
-  const [pic, setPic] = useState([])
+  const [pic, setPic] = useState([]);
+  const [show, setShow] = useState(false)
+  const [posts, setPosts] = useState([]);
+  const [user, setUser] = useState("")
+  const [changePic, setChangePic] = useState(false)
+
+  const toggleDetails = (posts) => {
+    if (show) {
+      setShow(false);
+    } else {
+      setShow(true);
+      setPosts(posts);
+    }
+  };
 
   useEffect(() => {
     fetch("http://localhost:5339/myposts", {
@@ -38,8 +53,6 @@ const Profile = () => {
             <p>40 following</p>
           </div>
         </div>
-
-
       </div>
 
 
@@ -52,11 +65,20 @@ const Profile = () => {
 
       <div className="gallery">
         {pic.map((pics) => {
-          return (
-            <img key={pics._id} src={pics.photo} alt="" />
-          )
+          return <img key={pics._id} src={pics.photo}
+            onClick={() => {
+              toggleDetails(pics)
+            }}
+            className="item"></img>;
         })}
       </div>
+      {show &&
+        <PostDetail item={posts} toggleDetails={toggleDetails} />
+      }
+      {/* {
+        changePic &&
+        <ProfilePic changeprofile={changeprofile} />
+      } */}
 
     </div>
   )
