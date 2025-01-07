@@ -1,6 +1,6 @@
 import React, { useContext} from "react";
 import logo from '../img/insta.png'
-import './Navbar.css'
+import '../css/Navbar.css'
 import { Link, useNavigate } from 'react-router-dom'
 import { LoginContext } from "../context/LoginContext";
 

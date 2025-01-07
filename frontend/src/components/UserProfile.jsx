@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import "./Profile.css"
+import "../css/Profile.css"
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 

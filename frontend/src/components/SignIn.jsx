@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import "./SignIn.css"
+import "../css/SignIn.css"
 import logo from "../img/insta.png"
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
