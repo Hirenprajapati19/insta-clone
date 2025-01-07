@@ -1,20 +1,53 @@
-
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import "./Profile.css"
-import PostDetail from './PostDetail'
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 const UserProfile = () => {
   const { userid } = useParams();
-  console.log(userid)
+  const [isFollow, setIsFollow] = useState(false);
+  const [user, setUser] = useState("");
   const [posts, setPosts] = useState([]);
-  const [user, setUser] = useState("")
-  const [show, setShow] = useState(false)
-  // const [changePic, setChangePic] = useState(false)
 
+  const followUser = (userId) => {
+    fetch("http://localhost:5339/follow", {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+      body: JSON.stringify({
+        followId: userId,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setIsFollow(true);
+      });
+  };
+
+  const unfollowUser = (userId) => {
+    fetch("http://localhost:5339/unfollow", {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("jwt")
+      },
+      body: JSON.stringify({
+        followId: userId
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+        setIsFollow(!isFollow)
+      })
+  }
 
 
   useEffect(() => {
+    console.log(localStorage.getItem("jwt"));
     fetch(`http://localhost:5339/user/${userid}`, {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
@@ -23,10 +56,14 @@ const UserProfile = () => {
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
+        setPosts(result.posts);
         setUser(result.user);
-        setPosts(result.post);
+        if (result.user.followers.includes(JSON.parse(localStorage.getItem("user"))._id)) {
+          setIsFollow(true);
+        }
       })
-  }, [])
+  }, [isFollow]);
+
 
 
   return (
@@ -40,14 +77,29 @@ const UserProfile = () => {
         </div>
 
         <div className="profile-data">
-          <div style={{ display: "flex", alignItems: "center" , justifyContent:"space-between"}}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}>
             <h1>{user.name}</h1>
-            <button className='followBtn'>Follow</button>
+            <button className='followBtn'
+              onClick={() => {
+                if (isFollow) {
+                  unfollowUser(user._id)
+                } else {
+                  followUser(user._id)
+                }
+              }}
+            >
+              {isFollow ? "Unfollow" : "Follow"}
+            </button>
           </div>
           <div className="profile-info ">
             <p>{posts.length} posts</p>
-            <p>40 followers</p>
-            <p>40 following</p>
+            <p>{user.followers ? user.followers.length : "0"} followers</p>
+            <p>{user.following ? user.following.length : "0"} following</p>
           </div>
         </div>
       </div>
@@ -62,16 +114,21 @@ const UserProfile = () => {
 
       <div className="gallery">
         {posts.map((pics) => {
-          return <img key={pics._id} src={pics.photo}
-            // onClick={() => {
-            //   toggleDetails(pics)
-            // }}
-            className="item"></img>;
+          return (
+            <img
+              key={pics._id}
+              src={pics.photo}
+              // onClick={() => {
+              //     toggleDetails(pics)
+              // }}
+              className="item"
+            ></img>
+          );
         })}
       </div>
       {/* {show &&
-        <PostDetail item={posts} toggleDetails={toggleDetails} />
-      } */}
+                <PostDetail item={posts} toggleDetails={toggleDetails} />
+            } */}
       {/* {
         changePic &&
         <ProfilePic changeprofile={changeprofile} />

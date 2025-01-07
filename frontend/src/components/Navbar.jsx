@@ -13,6 +13,7 @@ const Navbar = ({login}) => {
             <>
                 <Link to={"/profile"}><li>Profile</li></Link>
                 <Link to={"/createpost"}><li>CreatePost</li></Link>
+                <Link to={"/myfollwingpost"}><li>My Following Post</li></Link>
                 <Link to={""}>
             <button className="primaryBtn" onClick={() => setModalOpen(true)}>
               Log Out
