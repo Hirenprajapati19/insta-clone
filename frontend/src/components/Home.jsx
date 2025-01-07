@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from "react-toastify";
 
 const Home = () => {
+    var picLink = "https://cdn-icons-png.flaticon.com/128/3177/3177440.png"
     const navigate = useNavigate();
     const [data, setData] = useState([]);
     const [comment, setComment] = useState("");
@@ -129,7 +130,7 @@ const Home = () => {
                             <div className="card-header">
                                 <div className="card-pic">
                                     <img
-                                        src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWZyY2h8MXx8GVyc29ufGVufDB8MnwwfHw%3D&auto=format&fit=crop&w=500&q=60"
+                                        src={posts.postedBy.photo ? posts.postedBy.photo : picLink}
                                         alt="Image Description"
                                     />
                                 </div>
