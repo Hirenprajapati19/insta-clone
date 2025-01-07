@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import "./Home.css"
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { toast } from "react-toastify";
 
@@ -26,7 +26,7 @@ const Home = () => {
                 "Authorization": "Bearer " + localStorage.getItem("jwt")
             }
         }).then(res => res.json())
-            .then(result => {setData(result), console.log(result)})
+            .then(result => { setData(result), console.log(result) })
             .catch(err => console.log(err))
     }, [])
 
@@ -133,7 +133,7 @@ const Home = () => {
                                         alt="Image Description"
                                     />
                                 </div>
-                                <h4>{posts.postedBy.name}</h4>
+                                <h4><Link to={`/profile/${posts.postedBy._id}`}>{posts.postedBy.name}</Link></h4>
                             </div>
 
                             <div className="card-image">

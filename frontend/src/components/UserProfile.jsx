@@ -1,37 +1,31 @@
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./Profile.css"
-import { useState } from 'react'
 import PostDetail from './PostDetail'
+import { useParams } from 'react-router-dom'
 
-const Profile = () => {
-  const [pic, setPic] = useState([]);
-  const [show, setShow] = useState(false)
+const UserProfile = () => {
+  const { userid } = useParams();
+  console.log(userid)
   const [posts, setPosts] = useState([]);
-  // const [user, setUser] = useState("")
+  const [user, setUser] = useState("")
+  const [show, setShow] = useState(false)
   // const [changePic, setChangePic] = useState(false)
 
-  const toggleDetails = (posts) => {
-    if (show) {
-      setShow(false);
-    } else {
-      setShow(true);
-      setPosts(posts);
-    }
-  };
+
 
   useEffect(() => {
-    fetch("http://localhost:5339/myposts", {
+    fetch(`http://localhost:5339/user/${userid}`, {
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("jwt")
-      }
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
     })
-      .then(res => res.json())
-      .then(result => {
-        setPic(result)
-        console.log(pic)
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        setUser(result.user);
+        setPosts(result.post);
       })
-
   }, [])
 
 
@@ -46,9 +40,12 @@ const Profile = () => {
         </div>
 
         <div className="profile-data">
-          <h1>{JSON.parse(localStorage.getItem("user")).name}</h1>
+          <div style={{ display: "flex", alignItems: "center" , justifyContent:"space-between"}}>
+            <h1>{user.name}</h1>
+            <button className='followBtn'>Follow</button>
+          </div>
           <div className="profile-info ">
-            <p>40 postss</p>
+            <p>{posts.length} posts</p>
             <p>40 followers</p>
             <p>40 following</p>
           </div>
@@ -64,17 +61,17 @@ const Profile = () => {
       }} />
 
       <div className="gallery">
-        {pic.map((pics) => {
+        {posts.map((pics) => {
           return <img key={pics._id} src={pics.photo}
-            onClick={() => {
-              toggleDetails(pics)
-            }}
+            // onClick={() => {
+            //   toggleDetails(pics)
+            // }}
             className="item"></img>;
         })}
       </div>
-      {show &&
+      {/* {show &&
         <PostDetail item={posts} toggleDetails={toggleDetails} />
-      }
+      } */}
       {/* {
         changePic &&
         <ProfilePic changeprofile={changeprofile} />
@@ -84,4 +81,4 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export default UserProfile
