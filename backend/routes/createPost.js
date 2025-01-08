@@ -116,7 +116,7 @@ router.delete("/deletePost/:postId", requireLogin, (req, res) => {
 });
 
 
-router.get("/myfollwingpost", requireLogin, (req, res) => {
+router.get("/myfollowingpost", requireLogin, (req, res) => {
     POST.find({ postedBy: { $in: req.user.following } })
         .populate("postedBy", "_id name")
         .populate("comments.postedBy", "_id name")

@@ -9,7 +9,6 @@
 // import 'react-toastify/dist/ReactToastify.css'
 // import Createpost from './components/Createpost'
 // import { LoginContext } from './context/LoginContext'
-// import Modal from "./components/Modal";
 // import UserProfile from "./components/UserProfile";
 // import MyFolliwngPost from "./components/MyFollowingPost";
 
@@ -25,6 +24,7 @@ import MyFolliwngPost from "./screens/MyFollowingPost"
 import { ToastContainer } from "react-toastify"
 import { LoginContext } from "./context/LoginContext"
 import Navbar from "./components/Navbar"
+import Modal from "./components/Modal";
 
 
 const App = () => {
@@ -42,7 +42,7 @@ const App = () => {
             <Route exect path="/profile" element={<Profile />} />
             <Route path="/createpost" element={<Createpost />} />
             <Route path="/profile/:userid" element={<UserProfile />} />
-            <Route path="/myfollwingpost" element={<MyFolliwngPost />} />
+            <Route path="/myfollowingpost" element={<MyFolliwngPost />} />
           </Routes>
           <ToastContainer theme='dark' />
           {modalOpen && <Modal setModalOpen={setModalOpen}/>}
